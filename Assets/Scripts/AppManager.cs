@@ -11,14 +11,19 @@ public class AppManager : MonoBehaviour
     public GameObject ARCursorPrefab;
     public GameObject WorldPrefab;
 
+    public Canvas Fullscreen;
+    public Canvas BuildMenu;
+
     private GameObject ARCursor;
     private GameObject World;
     private TouchPhase last_phase = TouchPhase.Began;
+    public bool BuildMode = false;
 
     public void OnEnable()
     {
         ARCursor = Instantiate(ARCursorPrefab, transform);
         ARCursor.SetActive(false);
+        Fullscreen.gameObject.SetActive(true);
     }
 
     public void OnDisable()
@@ -82,5 +87,12 @@ public class AppManager : MonoBehaviour
     {
         Object.Destroy(World);
         World = null;
+    }
+
+    public void StartBuild()
+    {
+        Fullscreen.gameObject.SetActive(false);
+        BuildMenu.gameObject.SetActive(true);
+        BuildMode = true;
     }
 }
