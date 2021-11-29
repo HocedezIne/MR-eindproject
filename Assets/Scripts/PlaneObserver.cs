@@ -14,13 +14,16 @@ public class PlaneObserver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (raycast_manager.Raycast(screenpoint, hits))
+        if (app.BuildMode == true)
         {
-            app.EnableARCursor(hits[0].pose.position, hits[0].pose.rotation);
-        }
-        else
-        {
-            app.DisableARCursor();
+            if (raycast_manager.Raycast(screenpoint, hits))
+            {
+                app.EnableARCursor(hits[0].pose.position, hits[0].pose.rotation);
+            }
+            else
+            {
+                app.DisableARCursor();
+            }
         }
     }
 }
