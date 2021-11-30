@@ -14,6 +14,8 @@ public class PlaneObserver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (app.RunInSimulator()) return;
+
         if (app.BuildMode == true)
         {
             if (raycast_manager.Raycast(screenpoint, hits))

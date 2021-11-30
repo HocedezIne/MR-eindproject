@@ -54,6 +54,14 @@ public class AppManager : MonoBehaviour
         ARCursor.SetActive(false);
     }
 
+    public bool RunInSimulator()
+    {
+# if UNITY_EDITOR
+        return true;
+#else
+        return false;
+#endif
+    }
 
 
     private void Update()

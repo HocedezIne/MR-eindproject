@@ -511,6 +511,7 @@ GameObject:
   - component: {fileID: 687219600}
   - component: {fileID: 687219599}
   - component: {fileID: 687219598}
+  - component: {fileID: 687219603}
   - component: {fileID: 687219602}
   m_Layer: 0
   m_Name: AR Camera
@@ -635,6 +636,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   app: {fileID: 1016032383}
   raycast_manager: {fileID: 1121590130}
+--- !u!114 &687219603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687219596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ebec4bf4d481741bd6cf37e41d4252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  app: {fileID: 1016032383}
 --- !u!1 &699514997
 GameObject:
   m_ObjectHideFlags: 0
@@ -822,7 +836,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &898115175
 RectTransform:
   m_ObjectHideFlags: 0
@@ -977,7 +991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ARCursorPrefab: {fileID: 5492844095245451910, guid: 19ae7327f6cc6bc4c80a5ef6c2be44e8, type: 3}
-  WorldPrefab: {fileID: 919132149155446097, guid: 72ee9de222e119841866aafe77c3d6e6, type: 3}
+  WorldPrefab: {fileID: 666716873503190273, guid: 863533f7890beb242a2617d87bc03546, type: 3}
   Fullscreen: {fileID: 898115178}
   BuildMenu: {fileID: 163686092}
   BuildMode: 0
