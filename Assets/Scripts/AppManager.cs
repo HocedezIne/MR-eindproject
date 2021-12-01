@@ -13,17 +13,30 @@ public class AppManager : MonoBehaviour
 
     public Canvas Fullscreen;
     public Canvas BuildMenu;
+    public Text CurrentStepNumber;
+    public bool BuildMode = false;
 
     private GameObject ARCursor;
     private GameObject World;
     private TouchPhase last_phase = TouchPhase.Began;
-    public bool BuildMode = false;
 
     public void OnEnable()
     {
         ARCursor = Instantiate(ARCursorPrefab, transform);
         ARCursor.SetActive(false);
         Fullscreen.gameObject.SetActive(true);
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        
+    }
+
+    private void OnApplicationQuit()
+    {
+        Object.Destroy(ARCursor);
+        if (World) Object.Destroy(World);
+        World = null;
     }
 
     public void OnDisable()
@@ -97,10 +110,27 @@ public class AppManager : MonoBehaviour
         World = null;
     }
 
+    private int stepNumber =0;
+    private int totalSteps = 10;
+
     public void StartBuild()
     {
         Fullscreen.gameObject.SetActive(false);
         BuildMenu.gameObject.SetActive(true);
         BuildMode = true;
+
+        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + "out of " + totalSteps.ToString();
+    }
+
+    public void nextStep()
+    {
+        stepNumber += 1;
+        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + "out of " + totalSteps.ToString();
+    }
+
+    public void previousStep()
+    {
+        stepNumber -= 1;
+        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + "out of " + totalSteps.ToString();
     }
 }
