@@ -6,8 +6,9 @@ using UnityEngine;
 public enum BuildState {LOADED, BUILDING, DONE}
 
 [System.Serializable]
-public class Build: IEquatible<Build>
+public class Build: IEquatable<Build>
 {
+    // variables
     public static Build current;
     public int _id;
     public string name;
@@ -15,6 +16,7 @@ public class Build: IEquatible<Build>
     public int stepNumber;
     public int totalSteps;
 
+    // constructor
     public Build()
     {
         _id = 0;
@@ -24,6 +26,7 @@ public class Build: IEquatible<Build>
         totalSteps = 10;
     }
 
+    // needed to check if two builds are the same
     public bool Equals(Build other)
     {
         return null != other && _id == other._id;

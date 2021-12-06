@@ -11,6 +11,7 @@ public static class SaveLoad
 
     public static void Save()
     {
+        // check if the current build has already been saved, if so update that saves data
         int index = SaveLoad.savedBuilds.FindIndex(a => a.name.Contains(Build.current.name));
         if(SaveLoad.savedBuilds.Contains(Build.current))
         {

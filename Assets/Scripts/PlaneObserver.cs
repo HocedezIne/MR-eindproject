@@ -16,7 +16,8 @@ public class PlaneObserver : MonoBehaviour
     {
         if (app.RunInSimulator()) return;
 
-        if (app.BuildMode == true)
+        // only if app is in placing mode should this part be used
+        if (app.appMode == AppMode.PLACING)
         {
             if (raycast_manager.Raycast(screenpoint, hits))
             {
