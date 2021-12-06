@@ -138,7 +138,7 @@ public class AppManager : MonoBehaviour
         appMode = AppMode.BUILDING;
         prev.gameObject.SetActive(true);
         next.gameObject.SetActive(true);
-        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + "out of " + totalSteps.ToString();
+        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + " out of " + totalSteps.ToString();
 
         DisableARCursor();
     }
@@ -146,12 +146,12 @@ public class AppManager : MonoBehaviour
     public void nextStep()
     {
         if (stepNumber<totalSteps) stepNumber += 1;
-        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + "out of " + totalSteps.ToString();
+        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + " out of " + totalSteps.ToString();
     }
 
     public void previousStep()
     {
         if (stepNumber>0) stepNumber -= 1;
-        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + "out of " + totalSteps.ToString();
+        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + " out of " + totalSteps.ToString();
     }
 }
