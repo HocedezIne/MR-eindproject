@@ -1,47 +1,47 @@
 {
     "m_SelectedDeviceId": "HZQN1876BAK92300112",
     "m_SelectedPackage": {
-        "deviceId": "HZQN1876BAK92300112",
-        "name": "com.DefaultCompany.MREindproject",
-        "processId": 12420,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
-    "m_SelectedPriority": 1,
+    "m_SelectedPriority": 2,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 6839,
+            "processId": 19043,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 7525,
+            "processId": 28224,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 8387,
+            "processId": 29632,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 9963,
+            "processId": 4974,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 11904,
+            "processId": 14321,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
-            "name": "com.DefaultCompany.MREindproject",
-            "processId": 12420,
+            "name": "com.gma.water.sort.puzzle",
+            "processId": 17654,
             "exited": false
         }
     ],
@@ -53,7 +53,7 @@
             },
             {
                 "m_Name": "No Filter",
-                "m_Selected": true
+                "m_Selected": false
             },
             {
                 "m_Name": "",
@@ -69,7 +69,7 @@
             },
             {
                 "m_Name": "Unity",
-                "m_Selected": false
+                "m_Selected": true
             },
             {
                 "m_Name": "CRASH",

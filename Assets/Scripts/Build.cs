@@ -12,9 +12,24 @@ public class Build: IEquatable<Build>
     public static Build current;
     public int _id;
     public string name;
+    public GameObject parentObject;
     public BuildState state;
-    public int stepNumber;
-    public int totalSteps;
+    public int stepNumber = 1;
+
+    public int totalSteps { get { return parentObject.transform.childCount; } }
+
+    public List<GameObject> Blocks
+    {
+        get
+        {
+            List<GameObject> found = new List<GameObject>();
+
+            foreach (Transform child in parentObject.transform)
+                found.Add(child.gameObject);
+
+            return found;
+        }
+    }
 
     // constructor
     public Build()
@@ -22,8 +37,7 @@ public class Build: IEquatable<Build>
         _id = 0;
         name = "Test";
         state = BuildState.BUILDING;
-        stepNumber = 0;
-        totalSteps = 10;
+        stepNumber = 1;
     }
 
     // needed to check if two builds are the same

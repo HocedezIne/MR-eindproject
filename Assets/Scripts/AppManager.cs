@@ -10,7 +10,8 @@ public class AppManager : MonoBehaviour
 {
     //variables
     public GameObject ARCursorPrefab;
-    public GameObject WorldPrefab;
+
+    public List<Build> Sets;
 
     public Canvas Fullscreen;
     public Canvas BuildMenu;
@@ -98,14 +99,18 @@ public class AppManager : MonoBehaviour
 
         if ((touch.phase == TouchPhase.Ended) && (last_phase != TouchPhase.Ended))
         {
+            Debug.Log("you toucha da screen");
             if (ARCursor.activeSelf)
             {
-                World = Instantiate(WorldPrefab, ARCursor.transform.position, ARCursor.transform.rotation);
+                Debug.Log("special screen touch");
+                World = Instantiate(Sets[0].parentObject.gameObject, ARCursor.transform.position, ARCursor.transform.rotation);
                 StartBuilding();
+                Debug.Log("i don't get called");
             }
         }
 
         last_phase = touch.phase;
+        Debug.Log("e");
     }
 
 
@@ -117,9 +122,6 @@ public class AppManager : MonoBehaviour
         World = null;
     }
 
-    private int stepNumber =0;
-    private int totalSteps = 10;
-
     // called when selecting a build
     public void StartPlacing()
     {
@@ -129,29 +131,73 @@ public class AppManager : MonoBehaviour
 
         prev.gameObject.SetActive(false);
         next.gameObject.SetActive(false);
-        CurrentStepNumber.text = "Point the camera at a flat surface and tap the cursor";
+        CurrentStepNumber.text = "Point at a flat surface and tap";
     }
 
     // called when model has been placed
     public void StartBuilding()
     {
+        Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         appMode = AppMode.BUILDING;
         prev.gameObject.SetActive(true);
         next.gameObject.SetActive(true);
-        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + " out of " + totalSteps.ToString();
+        CurrentStepNumber.text = "Step number " + Sets[0].stepNumber.ToString() + " out of " + Sets[0].totalSteps.ToString();
 
         DisableARCursor();
+
+        List<GameObject> Blocks = new List<GameObject>();
+        foreach (Transform transform in World.transform)
+        {
+            Blocks.Add(transform.gameObject);
+        }
+
+        foreach (GameObject child in Blocks)
+        {
+            Debug.Log(child);
+            child.SetActive(false);
+            // MeshRenderer render = child.gameObject.GetComponent<MeshRenderer>();
+            // render.enabled = false;
+        }
+
+        for (int i = 0; i < Sets[0].stepNumber; i++)
+        {
+            Debug.Log(Blocks[i]);
+            Blocks[i].SetActive(true);
+        }
     }
 
     public void nextStep()
     {
-        if (stepNumber<totalSteps) stepNumber += 1;
-        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + " out of " + totalSteps.ToString();
+        List<GameObject> Blocks = new List<GameObject>();
+        foreach (Transform transform in World.transform)
+        {
+            Blocks.Add(transform.gameObject);
+        }
+
+        if (Sets[0].stepNumber < Sets[0].totalSteps) Sets[0].stepNumber += 1;
+        CurrentStepNumber.text = "Step number " + Sets[0].stepNumber.ToString() + " out of " + Sets[0].totalSteps.ToString();
+
+        for (int i = 0; i < Sets[0].stepNumber; i++)
+        {
+            Blocks[i].SetActive(true);
+        }
     }
 
     public void previousStep()
     {
-        if (stepNumber>0) stepNumber -= 1;
-        CurrentStepNumber.text = "Step number " + stepNumber.ToString() + " out of " + totalSteps.ToString();
+        List<GameObject> Blocks = new List<GameObject>();
+        foreach (Transform transform in World.transform)
+        {
+            Blocks.Add(transform.gameObject);
+        }
+
+        if (Sets[0].stepNumber > 1) Sets[0].stepNumber -= 1;
+        CurrentStepNumber.text = "Step number " + Sets[0].stepNumber.ToString() + " out of " + Sets[0].totalSteps.ToString();
+
+        for (int i = Sets[0].totalSteps - 1; i >= Sets[0].stepNumber; i--)
+        {
+            Debug.Log(Sets[0].Blocks[i]);
+            Blocks[i].SetActive(false);
+        }
     }
 }
