@@ -21,6 +21,9 @@ public class AppManager : MonoBehaviour
     private Canvas previousScreen;
 
     public List<Build> allSets;
+    public List<SetGeometry> setGeometries;
+    private SetGeometry setGeometry;
+    public List<SetImage> setImages;
 
     private GameObject ARCursor;
     private TouchPhase last_phase = TouchPhase.Began;
@@ -43,6 +46,9 @@ public class AppManager : MonoBehaviour
         overviewScreen.gameObject.SetActive(false);
         detailScreen.gameObject.SetActive(false);
         Screen.gameObject.SetActive(false);
+
+        ARCursor = Instantiate(ARCursorPrefab, transform);
+        ARCursor.SetActive(false);
     }
 
     // call loading screen on start
@@ -50,16 +56,17 @@ public class AppManager : MonoBehaviour
     {
         loadingScreen.gameObject.SetActive(true); // show loading screen
 
-        Transform panel = overviewScreen.transform.Find("Panel"); // get the content panel
-        Debug.Log(panel);
-        Transform content = panel.transform.Find("Content"); // get the content panel
-        Debug.Log(content);
+        SaveLoad.Load(); // load save data
+
+        // get the content panel
+        Transform panel = overviewScreen.transform.Find("Panel");
+        Transform content = panel.transform.Find("Content");
 
         foreach (Build b in allSets)
         {
             // add button prefab to overviewscreen for each set
             Button button = Instantiate(setButtonPrefab, content);
-            button.GetComponent<Image>().sprite = b.image;
+            button.GetComponent<Image>().sprite = setImages.Find((x) => x.buildIid == b._id).image;
             button.GetComponentInChildren<Text>().text = b.name;
             button.name = b._id.ToString();
             button.onClick.AddListener(OnSetSelect);
@@ -73,12 +80,17 @@ public class AppManager : MonoBehaviour
     // event on overview buttons
     private void OnSetSelect()
     {
-        // set current build
-        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
-        //Build.current = SaveLoad.savedBuilds[Int32.Parse(EventSystem.current.currentSelectedGameObject.name)];
-
-        // load details onto detail page
-
+        // set current build, check if there is save data for build 
+        if (SaveLoad.savedBuilds.Contains(allSets[Int32.Parse(EventSystem.current.currentSelectedGameObject.name)]))
+        {
+            Build.current = SaveLoad.savedBuilds[SaveLoad.savedBuilds.IndexOf(allSets[Int32.Parse(EventSystem.current.currentSelectedGameObject.name)])];
+        }
+        else
+        {
+            Build.current = allSets[Int32.Parse(EventSystem.current.currentSelectedGameObject.name)];
+        }
+        // set setGeometry
+        setGeometry = setGeometries.Find((x) => x.buildId == Build.current._id);
 
         detailScreen.gameObject.SetActive(true);
         overviewScreen.gameObject.SetActive(false);
@@ -91,7 +103,12 @@ public class AppManager : MonoBehaviour
         appMode = AppMode.PLACING;
 
         // load data onto screen
-
+        Transform panel = Screen.transform.Find("Panel");
+        panel.GetComponentInChildren<Text>().text = "Tap the cursor to place";
+        foreach (Transform child in panel.transform)
+        {
+            if (child.GetComponent<Button>()) child.gameObject.SetActive(false);
+        }
 
         Screen.gameObject.SetActive(true);
         detailScreen.gameObject.SetActive(false);
@@ -102,6 +119,35 @@ public class AppManager : MonoBehaviour
     public void StartBuilding()
     {
         appMode = AppMode.BUILDING;
+        DisableARCursor();
+
+        // change data on screen
+        Transform panel = Screen.transform.Find("Panel");
+        
+
+        panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of "  + setGeometry.totalSteps.ToString();
+        foreach (Transform child in panel.transform)
+        {
+            if (child.GetComponent<Button>()) child.gameObject.SetActive(true);
+        }
+    }
+
+    public void Next()
+    {
+        if (Build.current.stepNumber < setGeometry.totalSteps) Build.current.stepNumber += 1;
+        else return;
+
+        Transform panel = Screen.transform.Find("Panel");
+        panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
+    }
+
+    public void Previous()
+    {
+        if (Build.current.stepNumber > 1) Build.current.stepNumber -= 1;
+        else return;
+
+        Transform panel = Screen.transform.Find("Panel");
+        panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
     }
 
     // called when go back button is pressed
@@ -111,18 +157,22 @@ public class AppManager : MonoBehaviour
         {
             detailScreen.gameObject.SetActive(false);
             overviewScreen.gameObject.SetActive(true);
+
             previousScreen = null;
         } else if (previousScreen == detailScreen)
         {
+            appMode = AppMode.ONBOARDING;
+            SaveLoad.Save();
+
             Screen.gameObject.SetActive(false);
             detailScreen.gameObject.SetActive(true);
+
             previousScreen = overviewScreen;
         }
     }
 
     public void EnableARCursor(Vector3 position, Quaternion rotation)
     {
-        ARCursor = Instantiate(ARCursorPrefab, transform);
         ARCursor.SetActive(true);
         ARCursor.transform.position = position;
         ARCursor.transform.rotation = rotation;
@@ -130,13 +180,12 @@ public class AppManager : MonoBehaviour
 
     public void DisableARCursor()
     {
-        // ARCursor.SetActive(false);
+        ARCursor.SetActive(false);
     }
 
     private void Update()
     {
         if (appMode != AppMode.PLACING) return;
-        Debug.Log("appmode not placing");
 
         if (Input.touchCount != 1) return;
 
@@ -156,5 +205,20 @@ public class AppManager : MonoBehaviour
         }
 
         last_phase = touch.phase;
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if(Build.current != null) SaveLoad.Save();
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (Build.current != null) SaveLoad.Save();
+    }
+
+    private void OnDisable()
+    {
+        if (Build.current != null) SaveLoad.Save();
     }
 }

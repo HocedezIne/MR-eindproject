@@ -11,11 +11,12 @@ public static class SaveLoad
 
     public static void Save()
     {
+        savedBuilds.RemoveAll(item => item == null); // delete all null items from list
+
         // check if the current build has already been saved, if so update that saves data
         int index = SaveLoad.savedBuilds.FindIndex(a => a.name.Contains(Build.current.name));
         if(SaveLoad.savedBuilds.Contains(Build.current))
         {
-            SaveLoad.savedBuilds[index].state = Build.current.state;
             SaveLoad.savedBuilds[index].stepNumber = Build.current.stepNumber;
         } else
         {
@@ -37,5 +38,7 @@ public static class SaveLoad
             SaveLoad.savedBuilds = (List<Build>)bf.Deserialize(file);
             file.Close();
         }
+
+        savedBuilds.RemoveAll(item => item == null); // delete all null items from list
     }
 }

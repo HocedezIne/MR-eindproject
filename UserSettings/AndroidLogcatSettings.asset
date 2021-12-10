@@ -1,9 +1,9 @@
 {
     "m_SelectedDeviceId": "HZQN1876BAK92300112",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "HZQN1876BAK92300112",
+        "name": "com.DefaultCompany.MREindproject",
+        "processId": 15545,
         "exited": false
     },
     "m_SelectedPriority": 2,
@@ -11,37 +11,37 @@
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 19043,
+            "processId": 28096,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 28224,
+            "processId": 2186,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 29632,
+            "processId": 6910,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 4974,
+            "processId": 8933,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 14321,
+            "processId": 13804,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
-            "name": "com.gma.water.sort.puzzle",
-            "processId": 17654,
+            "name": "com.DefaultCompany.MREindproject",
+            "processId": 15545,
             "exited": false
         }
     ],
