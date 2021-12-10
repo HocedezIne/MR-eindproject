@@ -13,6 +13,7 @@ public class Build: IEquatable<Build>
     public int _id;
     public string name;
     public GameObject parentObject;
+    public Sprite image;
     public BuildState state;
     public int stepNumber = 1;
 

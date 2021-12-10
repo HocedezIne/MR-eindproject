@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,70 +10,21 @@ public enum AppMode { ONBOARDING, PLACING, BUILDING }
 public class AppManager : MonoBehaviour
 {
     //variables
+    public AppMode appMode;
     public GameObject ARCursorPrefab;
 
-    public List<Build> Sets;
+    public Canvas loadingScreen;
+    public Canvas overviewScreen;
+    public Button setButtonPrefab;
+    public Canvas detailScreen;
+    public Canvas Screen;
+    private Canvas previousScreen;
 
-    public Canvas Fullscreen;
-    public Canvas BuildMenu;
-    public Text CurrentStepNumber;
-    public Button prev;
-    public Button next;
-    public AppMode appMode = AppMode.ONBOARDING;
+    public List<Build> allSets;
 
     private GameObject ARCursor;
-    private GameObject World;
     private TouchPhase last_phase = TouchPhase.Began;
 
-    public void OnEnable()
-    {
-        ARCursor = Instantiate(ARCursorPrefab, transform);
-        ARCursor.SetActive(false);
-        Fullscreen.gameObject.SetActive(true);
-        appMode = AppMode.ONBOARDING;
-    }
-
-    // called when app is no longer focused without closing it
-    private void OnApplicationPause(bool pause)
-    {
-        
-    }
-
-    //on android onapplicationquit is called instead of ondisable
-    private void OnApplicationQuit()
-    {
-        Object.Destroy(ARCursor);
-        if (World) Object.Destroy(World);
-        World = null;
-    }
-
-    public void OnDisable()
-    {
-        Object.Destroy(ARCursor);
-        if (World) Object.Destroy(World);
-        World = null;
-    }
-
-
-
-    public void EnableARCursor(Vector3 position, Quaternion rotation)
-    {
-        if (!World)
-        {
-            ARCursor.SetActive(true);
-            ARCursor.transform.position = position;
-            ARCursor.transform.rotation = rotation;
-        }
-        else
-        {
-            ARCursor.SetActive(false);
-        }
-    }
-
-    public void DisableARCursor()
-    {
-        ARCursor.SetActive(false);
-    }
 
     public bool RunInSimulator()
     {
@@ -83,10 +35,108 @@ public class AppManager : MonoBehaviour
 #endif
     }
 
+    private void OnEnable()
+    {
+        appMode = AppMode.ONBOARDING;
+
+        loadingScreen.gameObject.SetActive(false);
+        overviewScreen.gameObject.SetActive(false);
+        detailScreen.gameObject.SetActive(false);
+        Screen.gameObject.SetActive(false);
+    }
+
+    // call loading screen on start
+    private void Start()
+    {
+        loadingScreen.gameObject.SetActive(true); // show loading screen
+
+        Transform panel = overviewScreen.transform.Find("Panel"); // get the content panel
+        Debug.Log(panel);
+        Transform content = panel.transform.Find("Content"); // get the content panel
+        Debug.Log(content);
+
+        foreach (Build b in allSets)
+        {
+            // add button prefab to overviewscreen for each set
+            Button button = Instantiate(setButtonPrefab, content);
+            button.GetComponent<Image>().sprite = b.image;
+            button.GetComponentInChildren<Text>().text = b.name;
+            button.name = b._id.ToString();
+            button.onClick.AddListener(OnSetSelect);
+        }
+
+        overviewScreen.gameObject.SetActive(true);
+        loadingScreen.gameObject.SetActive(false);
+        previousScreen = loadingScreen;
+    }
+
+    // event on overview buttons
+    private void OnSetSelect()
+    {
+        // set current build
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+        //Build.current = SaveLoad.savedBuilds[Int32.Parse(EventSystem.current.currentSelectedGameObject.name)];
+
+        // load details onto detail page
+
+
+        detailScreen.gameObject.SetActive(true);
+        overviewScreen.gameObject.SetActive(false);
+        previousScreen = overviewScreen;
+    }
+
+    // called when set is selected to be build
+    public void StartPlacing()
+    {
+        appMode = AppMode.PLACING;
+
+        // load data onto screen
+
+
+        Screen.gameObject.SetActive(true);
+        detailScreen.gameObject.SetActive(false);
+        previousScreen = detailScreen;
+    }
+
+    // called when set is placed
+    public void StartBuilding()
+    {
+        appMode = AppMode.BUILDING;
+    }
+
+    // called when go back button is pressed
+    public void GoToPreviousScreen()
+    {
+        if (previousScreen == overviewScreen)
+        {
+            detailScreen.gameObject.SetActive(false);
+            overviewScreen.gameObject.SetActive(true);
+            previousScreen = null;
+        } else if (previousScreen == detailScreen)
+        {
+            Screen.gameObject.SetActive(false);
+            detailScreen.gameObject.SetActive(true);
+            previousScreen = overviewScreen;
+        }
+    }
+
+    public void EnableARCursor(Vector3 position, Quaternion rotation)
+    {
+        ARCursor = Instantiate(ARCursorPrefab, transform);
+        ARCursor.SetActive(true);
+        ARCursor.transform.position = position;
+        ARCursor.transform.rotation = rotation;
+    }
+
+    public void DisableARCursor()
+    {
+        // ARCursor.SetActive(false);
+    }
 
     private void Update()
     {
-        if (World) return;
+        if (appMode != AppMode.PLACING) return;
+        Debug.Log("appmode not placing");
 
         if (Input.touchCount != 1) return;
 
@@ -99,105 +149,12 @@ public class AppManager : MonoBehaviour
 
         if ((touch.phase == TouchPhase.Ended) && (last_phase != TouchPhase.Ended))
         {
-            Debug.Log("you toucha da screen");
             if (ARCursor.activeSelf)
             {
-                Debug.Log("special screen touch");
-                World = Instantiate(Sets[0].parentObject.gameObject, ARCursor.transform.position, ARCursor.transform.rotation);
                 StartBuilding();
-                Debug.Log("i don't get called");
             }
         }
 
         last_phase = touch.phase;
-        Debug.Log("e");
-    }
-
-
-
-
-    public void DeleteWorld()
-    {
-        Object.Destroy(World);
-        World = null;
-    }
-
-    // called when selecting a build
-    public void StartPlacing()
-    {
-        Fullscreen.gameObject.SetActive(false);
-        BuildMenu.gameObject.SetActive(true);
-        appMode = AppMode.PLACING;
-
-        prev.gameObject.SetActive(false);
-        next.gameObject.SetActive(false);
-        CurrentStepNumber.text = "Point at a flat surface and tap";
-    }
-
-    // called when model has been placed
-    public void StartBuilding()
-    {
-        Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        appMode = AppMode.BUILDING;
-        prev.gameObject.SetActive(true);
-        next.gameObject.SetActive(true);
-        CurrentStepNumber.text = "Step number " + Sets[0].stepNumber.ToString() + " out of " + Sets[0].totalSteps.ToString();
-
-        DisableARCursor();
-
-        List<GameObject> Blocks = new List<GameObject>();
-        foreach (Transform transform in World.transform)
-        {
-            Blocks.Add(transform.gameObject);
-        }
-
-        foreach (GameObject child in Blocks)
-        {
-            Debug.Log(child);
-            child.SetActive(false);
-            // MeshRenderer render = child.gameObject.GetComponent<MeshRenderer>();
-            // render.enabled = false;
-        }
-
-        for (int i = 0; i < Sets[0].stepNumber; i++)
-        {
-            Debug.Log(Blocks[i]);
-            Blocks[i].SetActive(true);
-        }
-    }
-
-    public void nextStep()
-    {
-        List<GameObject> Blocks = new List<GameObject>();
-        foreach (Transform transform in World.transform)
-        {
-            Blocks.Add(transform.gameObject);
-        }
-
-        if (Sets[0].stepNumber < Sets[0].totalSteps) Sets[0].stepNumber += 1;
-        CurrentStepNumber.text = "Step number " + Sets[0].stepNumber.ToString() + " out of " + Sets[0].totalSteps.ToString();
-
-        for (int i = 0; i < Sets[0].stepNumber; i++)
-        {
-            Blocks[i].SetActive(true);
-        }
-    }
-
-    public void previousStep()
-    {
-        List<GameObject> Blocks = new List<GameObject>();
-        foreach (Transform transform in World.transform)
-        {
-            Blocks.Add(transform.gameObject);
-        }
-
-        if (Sets[0].stepNumber > 1) Sets[0].stepNumber -= 1;
-        CurrentStepNumber.text = "Step number " + Sets[0].stepNumber.ToString() + " out of " + Sets[0].totalSteps.ToString();
-
-        for (int i = Sets[0].totalSteps - 1; i >= Sets[0].stepNumber; i--)
-        {
-            Debug.Log(Sets[0].Blocks[i]);
-            Blocks[i].SetActive(false);
-        }
     }
 }
