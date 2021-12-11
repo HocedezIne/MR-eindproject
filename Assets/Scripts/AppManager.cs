@@ -93,6 +93,13 @@ public class AppManager : MonoBehaviour
         // set setGeometry
         setGeometry = setGeometries.Find((x) => x.buildId == Build.current._id);
 
+        // put data on detail screen
+        Transform mainPanel = detailScreen.transform.Find("Panel");
+        Image setImage = mainPanel.transform.Find("image").GetComponent<Image>();
+        setImage.sprite = setImages.Find((x) => x.buildIid == Build.current._id).image;
+        Transform smallPanel = mainPanel.transform.Find("Panel");
+        smallPanel.GetComponentInChildren<Text>().text = Build.current.name;
+
         detailScreen.gameObject.SetActive(true);
         overviewScreen.gameObject.SetActive(false);
         previousScreen = overviewScreen;
@@ -145,7 +152,7 @@ public class AppManager : MonoBehaviour
         else return;
 
         // update visible blocks
-        shownObject.transform.GetChild(Build.current.stepNumber-1).gameObject.SetActive(true);
+        // shownObject.transform.GetChild(Build.current.stepNumber-1).gameObject.SetActive(true);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
@@ -158,8 +165,8 @@ public class AppManager : MonoBehaviour
         if (Build.current.stepNumber > 1) Build.current.stepNumber -= 1;
         else return;
 
-        //update visible blocks
-        shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
+        // update visible blocks
+        // shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
