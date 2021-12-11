@@ -59,6 +59,11 @@ public class AppManager : MonoBehaviour
 
         SaveLoad.Load(); // load save data
 
+        Invoke("Overview", 1.5f);
+    }
+
+    private void Overview()
+    {
         // get the content panel
         Transform panel = overviewScreen.transform.Find("Panel");
         Transform content = panel.transform.Find("Content");
