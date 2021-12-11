@@ -212,8 +212,6 @@ public class AppManager : MonoBehaviour
 
     private void Update()
     {
-        if (appMode != AppMode.PLACING) return;
-
         if (shownObject) return;
 
         if (Input.touchCount != 1) return;
@@ -229,11 +227,7 @@ public class AppManager : MonoBehaviour
         {
             if (ARCursor.activeSelf)
             {
-                // place geometry for chosen lego set
-                shownObject = Instantiate(setGeometry.parentObject, ARCursor.transform);
-                Debug.Log(shownObject + " " + shownObject.transform);
-
-                StartBuilding();
+                shownObject = Instantiate(setGeometry.parentObject, ARCursor.transform.position, ARCursor.transform.rotation);
             }
         }
 
