@@ -129,12 +129,12 @@ public class AppManager : MonoBehaviour
         appMode = AppMode.BUILDING;
         DisableARCursor();
 
-        /*// make right blocks visible
+        // make right blocks visible
         for (int i = 0; i < setGeometry.totalSteps; i++)
         {
             if (i <= Build.current.stepNumber-1) shownObject.transform.GetChild(i).gameObject.SetActive(true);
             else shownObject.transform.GetChild(i).gameObject.SetActive(false);
-        }*/
+        }
 
         // change data on screen
         Transform panel = Screen.transform.Find("Panel");
@@ -152,7 +152,7 @@ public class AppManager : MonoBehaviour
         else return;
 
         // update visible blocks
-        // shownObject.transform.GetChild(Build.current.stepNumber-1).gameObject.SetActive(true);
+        shownObject.transform.GetChild(Build.current.stepNumber-1).gameObject.SetActive(true);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
@@ -166,7 +166,7 @@ public class AppManager : MonoBehaviour
         else return;
 
         // update visible blocks
-        // shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
+        shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
@@ -186,6 +186,8 @@ public class AppManager : MonoBehaviour
         {
             appMode = AppMode.ONBOARDING;
             SaveLoad.Save();
+
+            DeleteObject();
 
             Screen.gameObject.SetActive(false);
             detailScreen.gameObject.SetActive(true);
@@ -228,6 +230,7 @@ public class AppManager : MonoBehaviour
             if (ARCursor.activeSelf)
             {
                 shownObject = Instantiate(setGeometry.parentObject, ARCursor.transform.position, ARCursor.transform.rotation);
+                StartBuilding();
             }
         }
 
@@ -236,7 +239,8 @@ public class AppManager : MonoBehaviour
 
     public void DeleteObject()
     {
-        UnityEngine.Object.Destroy(shownObject);
+        // delete the placed build if there is one
+        if (shownObject) UnityEngine.Object.Destroy(shownObject);
         shownObject = null;
     }
 
@@ -250,8 +254,7 @@ public class AppManager : MonoBehaviour
         if (Build.current != null) SaveLoad.Save();
 
         UnityEngine.Object.Destroy(ARCursor);
-        if (shownObject) UnityEngine.Object.Destroy(shownObject);
-        shownObject = null;
+        DeleteObject();
     }
 
     private void OnDisable()
@@ -259,7 +262,6 @@ public class AppManager : MonoBehaviour
         if (Build.current != null) SaveLoad.Save();
 
         UnityEngine.Object.Destroy(ARCursor);
-        if (shownObject) UnityEngine.Object.Destroy(shownObject);
-        shownObject = null;
+        DeleteObject();
     }
 }
