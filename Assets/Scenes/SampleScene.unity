@@ -1656,11 +1656,20 @@ MonoBehaviour:
   allSets:
   - _id: 0
     name: Man
-    state: 0
+    stepNumber: 1
+  - _id: 1
+    name: Turtle
     stepNumber: 1
   setGeometries:
-  - _id: 0
+  - buildId: 0
     parentObject: {fileID: 7759310249873449645, guid: d8ebc473676039848b4004dd46fe22d4, type: 3}
+  - buildId: 1
+    parentObject: {fileID: 5661576682597553017, guid: e6ecd0627bd4a5a409f9c876dc8860fe, type: 3}
+  setImages:
+  - buildIid: 0
+    image: {fileID: 21300000, guid: de7713ed6375a5940ab3925c4c962761, type: 3}
+  - buildIid: 1
+    image: {fileID: 21300000, guid: de7713ed6375a5940ab3925c4c962761, type: 3}
 --- !u!1 &1121590127
 GameObject:
   m_ObjectHideFlags: 0

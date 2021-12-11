@@ -23,6 +23,7 @@ public class AppManager : MonoBehaviour
     public List<Build> allSets;
     public List<SetGeometry> setGeometries;
     private SetGeometry setGeometry;
+    private GameObject shownObject;
     public List<SetImage> setImages;
 
     private GameObject ARCursor;
@@ -121,10 +122,15 @@ public class AppManager : MonoBehaviour
         appMode = AppMode.BUILDING;
         DisableARCursor();
 
+        /*// make right blocks visible
+        for (int i = 0; i < setGeometry.totalSteps; i++)
+        {
+            if (i <= Build.current.stepNumber-1) shownObject.transform.GetChild(i).gameObject.SetActive(true);
+            else shownObject.transform.GetChild(i).gameObject.SetActive(false);
+        }*/
+
         // change data on screen
         Transform panel = Screen.transform.Find("Panel");
-        
-
         panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of "  + setGeometry.totalSteps.ToString();
         foreach (Transform child in panel.transform)
         {
@@ -134,18 +140,28 @@ public class AppManager : MonoBehaviour
 
     public void Next()
     {
+        // check if not last step
         if (Build.current.stepNumber < setGeometry.totalSteps) Build.current.stepNumber += 1;
         else return;
 
+        // update visible blocks
+        shownObject.transform.GetChild(Build.current.stepNumber-1).gameObject.SetActive(true);
+
+        // update ui
         Transform panel = Screen.transform.Find("Panel");
         panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
     }
 
     public void Previous()
     {
+        // check if not first step
         if (Build.current.stepNumber > 1) Build.current.stepNumber -= 1;
         else return;
 
+        //update visible blocks
+        shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
+
+        // update ui
         Transform panel = Screen.transform.Find("Panel");
         panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
     }
@@ -173,9 +189,13 @@ public class AppManager : MonoBehaviour
 
     public void EnableARCursor(Vector3 position, Quaternion rotation)
     {
-        ARCursor.SetActive(true);
-        ARCursor.transform.position = position;
-        ARCursor.transform.rotation = rotation;
+        if (!shownObject)
+        {
+            ARCursor.SetActive(true);
+            ARCursor.transform.position = position;
+            ARCursor.transform.rotation = rotation;
+        }
+        else ARCursor.SetActive(false);
     }
 
     public void DisableARCursor()
@@ -186,6 +206,8 @@ public class AppManager : MonoBehaviour
     private void Update()
     {
         if (appMode != AppMode.PLACING) return;
+
+        if (shownObject) return;
 
         if (Input.touchCount != 1) return;
 
@@ -200,11 +222,21 @@ public class AppManager : MonoBehaviour
         {
             if (ARCursor.activeSelf)
             {
+                // place geometry for chosen lego set
+                shownObject = Instantiate(setGeometry.parentObject, ARCursor.transform);
+                Debug.Log(shownObject + " " + shownObject.transform);
+
                 StartBuilding();
             }
         }
 
         last_phase = touch.phase;
+    }
+
+    public void DeleteObject()
+    {
+        UnityEngine.Object.Destroy(shownObject);
+        shownObject = null;
     }
 
     private void OnApplicationPause(bool pause)
@@ -215,10 +247,18 @@ public class AppManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         if (Build.current != null) SaveLoad.Save();
+
+        UnityEngine.Object.Destroy(ARCursor);
+        if (shownObject) UnityEngine.Object.Destroy(shownObject);
+        shownObject = null;
     }
 
     private void OnDisable()
     {
         if (Build.current != null) SaveLoad.Save();
+
+        UnityEngine.Object.Destroy(ARCursor);
+        if (shownObject) UnityEngine.Object.Destroy(shownObject);
+        shownObject = null;
     }
 }
