@@ -21,6 +21,7 @@ public class AppManager : MonoBehaviour
     private Canvas previousScreen;
 
     public float buildOfset;
+    public float moveDuration;
     public List<Build> allSets;
     public List<SetGeometry> setGeometries;
     private SetGeometry setGeometry;
@@ -180,11 +181,12 @@ public class AppManager : MonoBehaviour
 
         while (transform.position != target)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * 0.02f);
             Debug.Log("still busy: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
         }
 
-        yield return true;
+        Debug.LogWarning("Reached position -> current: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z + " target: " + target.x + ", " + target.y + ", " + target.z);
+        yield return null;
     }
 
     public void Previous()
