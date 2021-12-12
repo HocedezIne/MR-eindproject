@@ -441,7 +441,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -458,7 +458,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 333144798}
   m_LocalRotation: {x: 0.052509237, y: -0.31234518, z: 0.017294105, w: 0.9483587}
-  m_LocalPosition: {x: 0.066, y: 0.038, z: -0.089}
+  m_LocalPosition: {x: 0.066, y: 0.0483, z: -0.089}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1737,6 +1737,7 @@ MonoBehaviour:
   setButtonPrefab: {fileID: 919252763501170899, guid: 8379ee979dd833b48bd2d12a9c6939d0, type: 3}
   detailScreen: {fileID: 898115178}
   Screen: {fileID: 163686092}
+  buildOfset: 0.5
   allSets:
   - _id: 0
     name: Man
@@ -1746,7 +1747,7 @@ MonoBehaviour:
     stepNumber: 1
   setGeometries:
   - buildId: 0
-    parentObject: {fileID: 7759310249873449645, guid: d8ebc473676039848b4004dd46fe22d4, type: 3}
+    parentObject: {fileID: 4831705935613101826, guid: d8ebc473676039848b4004dd46fe22d4, type: 3}
   - buildId: 1
     parentObject: {fileID: 5661576682597553017, guid: e6ecd0627bd4a5a409f9c876dc8860fe, type: 3}
   setImages:

@@ -20,6 +20,7 @@ public class AppManager : MonoBehaviour
     public Canvas Screen;
     private Canvas previousScreen;
 
+    public float buildOfset;
     public List<Build> allSets;
     public List<SetGeometry> setGeometries;
     private SetGeometry setGeometry;
@@ -137,13 +138,17 @@ public class AppManager : MonoBehaviour
         // make right blocks visible
         for (int i = 0; i < setGeometry.totalSteps; i++)
         {
-            if (i <= Build.current.stepNumber-1) shownObject.transform.GetChild(i).gameObject.SetActive(true);
-            else shownObject.transform.GetChild(i).gameObject.SetActive(false);
+            if (i <= Build.current.stepNumber - 1) shownObject.transform.GetChild(i).gameObject.SetActive(true);
+            else
+            {
+                shownObject.transform.GetChild(i).gameObject.SetActive(false);
+                shownObject.transform.GetChild(i).gameObject.transform.position += new Vector3(0, buildOfset, 0);
+            }
         }
 
         // change data on screen
         Transform panel = Screen.transform.Find("Panel");
-        panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of "  + setGeometry.totalSteps.ToString();
+        panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
         foreach (Transform child in panel.transform)
         {
             if (child.GetComponent<Button>()) child.gameObject.SetActive(true);
@@ -157,7 +162,10 @@ public class AppManager : MonoBehaviour
         else return;
 
         // update visible blocks
-        shownObject.transform.GetChild(Build.current.stepNumber-1).gameObject.SetActive(true);
+        shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.SetActive(true);
+        shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.transform.position -= new Vector3(0, buildOfset, 0);
+
+        Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
@@ -172,6 +180,9 @@ public class AppManager : MonoBehaviour
 
         // update visible blocks
         shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
+        shownObject.transform.GetChild(Build.current.stepNumber).gameObject.transform.position += new Vector3(0, buildOfset, 0);
+
+        Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
@@ -187,7 +198,8 @@ public class AppManager : MonoBehaviour
             overviewScreen.gameObject.SetActive(true);
 
             previousScreen = null;
-        } else if (previousScreen == detailScreen)
+        }
+        else if (previousScreen == detailScreen)
         {
             appMode = AppMode.ONBOARDING;
             SaveLoad.Save();
@@ -235,6 +247,7 @@ public class AppManager : MonoBehaviour
             if (ARCursor.activeSelf)
             {
                 shownObject = Instantiate(setGeometry.parentObject, ARCursor.transform.position, ARCursor.transform.rotation);
+                Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
                 StartBuilding();
             }
         }
@@ -251,7 +264,7 @@ public class AppManager : MonoBehaviour
 
     private void OnApplicationPause(bool pause)
     {
-        if(Build.current != null) SaveLoad.Save();
+        if (Build.current != null) SaveLoad.Save();
     }
 
     private void OnApplicationQuit()
