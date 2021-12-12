@@ -67,11 +67,7 @@ public class AppManager : MonoBehaviour
 
         SaveLoad.Load(); // load save data
 
-        Invoke("Overview", 1.5f);
-    }
-
-    private void Overview()
-    {
+        // put content on overview
         // get the content panel
         Transform panel = overviewScreen.transform.Find("Panel");
         Transform content = panel.transform.Find("Content");
@@ -86,6 +82,12 @@ public class AppManager : MonoBehaviour
             button.onClick.AddListener(OnSetSelect);
         }
 
+        if (SaveLoad.savedBuilds.Count > 0) Invoke("Overview", 1.5f);
+        else Invoke("StartOnboarding", 1.5f);
+    }
+
+    private void Overview()
+    {
         overviewScreen.gameObject.SetActive(true);
         loadingScreen.gameObject.SetActive(false);
         previousScreen = loadingScreen;
@@ -210,29 +212,11 @@ public class AppManager : MonoBehaviour
         // update visible blocks
         shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.SetActive(true);
         Transform blockTransform = shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.transform;
-        // blockTransform.position -= new Vector3(0, buildOfset, 0);
-        StartCoroutine(MoveDownBlock(blockTransform));
+        blockTransform.position -= new Vector3(0, buildOfset, 0);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
         panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
-    }
-
-    private IEnumerator MoveDownBlock(Transform transform)
-    {
-
-
-        /*Vector3 target = transform.position - new Vector3(0, buildOfset, 0);
-        Debug.Log("current: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
-        Debug.Log("target: " + target.x + ", " + target.y + ", " + target.z);
-
-        while (transform.position != target)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
-            Debug.Log("still busy: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
-        }*/
-
-        yield return true;
     }
 
     public void Previous()
@@ -255,7 +239,19 @@ public class AppManager : MonoBehaviour
     {
         if (previousScreen == overviewScreen)
         {
-            detailScreen.gameObject.SetActive(false);
+            if (onboardingScreen1.gameObject.activeSelf)
+            {
+                onboardingScreen1.gameObject.SetActive(false);
+            } 
+            else if (onboardingScreen2.gameObject.activeSelf)
+            {
+                onboardingScreen2.gameObject.SetActive(false);
+            }
+            else if (onboardingScreen3.gameObject.activeSelf)
+            {
+                onboardingScreen3.gameObject.SetActive(false);
+            }
+            else detailScreen.gameObject.SetActive(false);
             overviewScreen.gameObject.SetActive(true);
 
             previousScreen = null;

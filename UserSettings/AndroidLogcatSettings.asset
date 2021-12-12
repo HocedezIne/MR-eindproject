@@ -3,23 +3,11 @@
     "m_SelectedPackage": {
         "deviceId": "HZQN1876BAK92300112",
         "name": "com.DefaultCompany.MREindproject",
-        "processId": 30073,
+        "processId": 7649,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "HZQN1876BAK92300112",
-            "name": "com.DefaultCompany.MREindproject",
-            "processId": 21375,
-            "exited": true
-        },
-        {
-            "deviceId": "HZQN1876BAK92300112",
-            "name": "com.DefaultCompany.MREindproject",
-            "processId": 23610,
-            "exited": true
-        },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.android.launcher3",
@@ -48,6 +36,18 @@
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
             "processId": 30073,
+            "exited": true
+        },
+        {
+            "deviceId": "HZQN1876BAK92300112",
+            "name": "com.DefaultCompany.MREindproject",
+            "processId": 3402,
+            "exited": true
+        },
+        {
+            "deviceId": "HZQN1876BAK92300112",
+            "name": "com.DefaultCompany.MREindproject",
+            "processId": 7649,
             "exited": false
         }
     ],
