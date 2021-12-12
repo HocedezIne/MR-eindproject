@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "c0dd23b6",
+    "m_SelectedDeviceId": "HZQN1876BAK92300112",
     "m_SelectedPackage": {
-        "deviceId": "c0dd23b6",
+        "deviceId": "HZQN1876BAK92300112",
         "name": "com.DefaultCompany.MREindproject",
-        "processId": 16690,
+        "processId": 30073,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -11,49 +11,43 @@
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 9298,
+            "processId": 21375,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 11534,
+            "processId": 23610,
             "exited": true
         },
         {
             "deviceId": "HZQN1876BAK92300112",
-            "name": "com.DefaultCompany.MREindproject",
-            "processId": 17276,
-            "exited": true
-        },
-        {
-            "deviceId": "HZQN1876BAK92300112",
-            "name": "com.DefaultCompany.MREindproject",
-            "processId": 21487,
-            "exited": true
-        },
-        {
-            "deviceId": "HZQN1876BAK92300112",
-            "name": "com.DefaultCompany.MREindproject",
-            "processId": 27073,
-            "exited": true
-        },
-        {
-            "deviceId": "HZQN1876BAK92300112",
-            "name": "com.DefaultCompany.MREindproject",
-            "processId": 31971,
+            "name": "com.android.launcher3",
+            "processId": 6112,
             "exited": false
         },
         {
-            "deviceId": "c0dd23b6",
+            "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 16687,
-            "exited": false
+            "processId": 24699,
+            "exited": true
         },
         {
-            "deviceId": "c0dd23b6",
+            "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
-            "processId": 16690,
+            "processId": 27361,
+            "exited": true
+        },
+        {
+            "deviceId": "HZQN1876BAK92300112",
+            "name": "com.DefaultCompany.MREindproject",
+            "processId": 28556,
+            "exited": true
+        },
+        {
+            "deviceId": "HZQN1876BAK92300112",
+            "name": "com.DefaultCompany.MREindproject",
+            "processId": 30073,
             "exited": false
         }
     ],

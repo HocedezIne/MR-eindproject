@@ -15,12 +15,16 @@ public class AppManager : MonoBehaviour
 
     public Canvas loadingScreen;
     public Canvas overviewScreen;
+    public Canvas onboardingScreen1;
+    public Canvas onboardingScreen2;
+    public Canvas onboardingScreen3;
     public Button setButtonPrefab;
     public Canvas detailScreen;
     public Canvas Screen;
     private Canvas previousScreen;
 
     public float buildOfset;
+    public float moveDuration;
     public List<Build> allSets;
     public List<SetGeometry> setGeometries;
     private SetGeometry setGeometry;
@@ -46,6 +50,9 @@ public class AppManager : MonoBehaviour
 
         loadingScreen.gameObject.SetActive(false);
         overviewScreen.gameObject.SetActive(false);
+        onboardingScreen1.gameObject.SetActive(false);
+        onboardingScreen2.gameObject.SetActive(false);
+        onboardingScreen3.gameObject.SetActive(false);
         detailScreen.gameObject.SetActive(false);
         Screen.gameObject.SetActive(false);
 
@@ -82,6 +89,45 @@ public class AppManager : MonoBehaviour
         overviewScreen.gameObject.SetActive(true);
         loadingScreen.gameObject.SetActive(false);
         previousScreen = loadingScreen;
+    }
+
+    // on click help icon
+    public void StartOnboarding()
+    {
+        onboardingScreen1.gameObject.SetActive(true);
+        overviewScreen.gameObject.SetActive(false);
+        previousScreen = overviewScreen;
+    }
+
+    // change to next onboarding screen
+    public void NextOnboarding()
+    {
+        if (onboardingScreen2.gameObject.activeSelf)
+        {
+            onboardingScreen3.gameObject.SetActive(true);
+            onboardingScreen2.gameObject.SetActive(false);
+        }
+        if (onboardingScreen1.gameObject.activeSelf)
+        {
+            onboardingScreen2.gameObject.SetActive(true);
+            onboardingScreen1.gameObject.SetActive(false);
+        }     
+    }
+
+    // change to previous onboarding screen
+    public void PreviousOnboarding()
+    {
+        if (onboardingScreen2.gameObject.activeSelf)
+        {
+            onboardingScreen1.gameObject.SetActive(true);
+            onboardingScreen2.gameObject.SetActive(false);
+        }
+        if (onboardingScreen3.gameObject.activeSelf)
+        {
+            onboardingScreen2.gameObject.SetActive(true);
+            onboardingScreen3.gameObject.SetActive(false);
+        }
+
     }
 
     // event on overview buttons
@@ -163,13 +209,30 @@ public class AppManager : MonoBehaviour
 
         // update visible blocks
         shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.SetActive(true);
-        shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.transform.position -= new Vector3(0, buildOfset, 0);
-
-        Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
+        Transform blockTransform = shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.transform;
+        // blockTransform.position -= new Vector3(0, buildOfset, 0);
+        StartCoroutine(MoveDownBlock(blockTransform));
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
         panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
+    }
+
+    private IEnumerator MoveDownBlock(Transform transform)
+    {
+
+
+        /*Vector3 target = transform.position - new Vector3(0, buildOfset, 0);
+        Debug.Log("current: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
+        Debug.Log("target: " + target.x + ", " + target.y + ", " + target.z);
+
+        while (transform.position != target)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
+            Debug.Log("still busy: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
+        }*/
+
+        yield return true;
     }
 
     public void Previous()
@@ -181,8 +244,6 @@ public class AppManager : MonoBehaviour
         // update visible blocks
         shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
         shownObject.transform.GetChild(Build.current.stepNumber).gameObject.transform.position += new Vector3(0, buildOfset, 0);
-
-        Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
@@ -247,7 +308,6 @@ public class AppManager : MonoBehaviour
             if (ARCursor.activeSelf)
             {
                 shownObject = Instantiate(setGeometry.parentObject, ARCursor.transform.position, ARCursor.transform.rotation);
-                Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
                 StartBuilding();
             }
         }
