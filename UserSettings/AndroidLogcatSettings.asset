@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "HZQN1876BAK92300112",
+    "m_SelectedDeviceId": "c0dd23b6",
     "m_SelectedPackage": {
-        "deviceId": "HZQN1876BAK92300112",
+        "deviceId": "c0dd23b6",
         "name": "com.DefaultCompany.MREindproject",
-        "processId": 31971,
+        "processId": 16690,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -42,6 +42,18 @@
             "deviceId": "HZQN1876BAK92300112",
             "name": "com.DefaultCompany.MREindproject",
             "processId": 31971,
+            "exited": false
+        },
+        {
+            "deviceId": "c0dd23b6",
+            "name": "com.DefaultCompany.MREindproject",
+            "processId": 16687,
+            "exited": false
+        },
+        {
+            "deviceId": "c0dd23b6",
+            "name": "com.DefaultCompany.MREindproject",
+            "processId": 16690,
             "exited": false
         }
     ],
