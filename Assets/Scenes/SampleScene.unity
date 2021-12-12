@@ -1737,7 +1737,7 @@ MonoBehaviour:
   setButtonPrefab: {fileID: 919252763501170899, guid: 8379ee979dd833b48bd2d12a9c6939d0, type: 3}
   detailScreen: {fileID: 898115178}
   Screen: {fileID: 163686092}
-  buildOfset: 0.5
+  buildOfset: 0.05
   allSets:
   - _id: 0
     name: Man

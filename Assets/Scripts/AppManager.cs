@@ -163,13 +163,28 @@ public class AppManager : MonoBehaviour
 
         // update visible blocks
         shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.SetActive(true);
-        shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.transform.position -= new Vector3(0, buildOfset, 0);
-
-        Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
+        Transform blockTransform = shownObject.transform.GetChild(Build.current.stepNumber - 1).gameObject.transform;
+        // blockTransform.position -= new Vector3(0, buildOfset, 0);
+        StartCoroutine(MoveDownBlock(blockTransform));
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
         panel.GetComponentInChildren<Text>().text = Build.current.stepNumber.ToString() + " out of " + setGeometry.totalSteps.ToString();
+    }
+
+    private IEnumerator MoveDownBlock(Transform transform)
+    {
+        Vector3 target = transform.position - new Vector3(0, buildOfset, 0);
+        Debug.Log("current: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
+        Debug.Log("target: " + target.x + ", " + target.y + ", " + target.z);
+
+        while (transform.position != target)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime);
+            Debug.Log("still busy: " + transform.position.x + ", " + transform.position.y + ", " + transform.position.z);
+        }
+
+        yield return true;
     }
 
     public void Previous()
@@ -181,8 +196,6 @@ public class AppManager : MonoBehaviour
         // update visible blocks
         shownObject.transform.GetChild(Build.current.stepNumber).gameObject.SetActive(false);
         shownObject.transform.GetChild(Build.current.stepNumber).gameObject.transform.position += new Vector3(0, buildOfset, 0);
-
-        Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
 
         // update ui
         Transform panel = Screen.transform.Find("Panel");
@@ -247,7 +260,6 @@ public class AppManager : MonoBehaviour
             if (ARCursor.activeSelf)
             {
                 shownObject = Instantiate(setGeometry.parentObject, ARCursor.transform.position, ARCursor.transform.rotation);
-                Debug.Log(shownObject.transform.position.x + ", " + shownObject.transform.position.y + ", " + shownObject.transform.position.z);
                 StartBuilding();
             }
         }
